@@ -1,4 +1,6 @@
-Experimental decoupled `dbt-external-tables`
+**PROOF OF CONCEPT - USE AT OWN RISK**
+
+Experimental decoupled `dbt-external-tables` for consideration by dbt-athena-community maintainers. See https://github.com/dbt-athena/dbt-athena/issues/633
 
 Can we implement dbt-external-tables without having to merge into dbt-external-tables?
 
