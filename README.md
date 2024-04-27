@@ -6,7 +6,7 @@ Can we implement dbt-external-tables without having to merge into dbt-external-t
 
 # Usage
 
-A fully working example project provided. See [example_project](example_project/README.md)
+A fully working example project provided. See [example_project](example_project)
 
 ## Add dbt-external-tables
 
