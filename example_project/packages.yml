@@ -1,0 +1,6 @@
+packages:
+  - package: dbt-labs/dbt_external_tables
+    version: ['>=0.8.7']
+  #- git: https://github.com/brabster/dbt-athena-external-tables.git
+  #  revision: main
+  - local: ../
