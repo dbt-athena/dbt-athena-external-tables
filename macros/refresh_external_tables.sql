@@ -52,7 +52,7 @@
                     {% do finals.append(construct) %}
                 {%- endfor -%}
             {%- endif -%}
-            {%- set ddl = dbt_external_tables.redshift_alter_table_add_partitions(source_node, finals, is_athena=True) -%}
+            {%- set ddl = dbt_external_tables.redshift_alter_table_add_partitions(source_node, finals) -%}
             {{ return(ddl) }}
             {% do return([]) %}
         {% endif %}
