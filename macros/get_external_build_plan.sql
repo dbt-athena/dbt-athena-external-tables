@@ -15,5 +15,6 @@
     {% else %}
         {% set build_plan = dbt_external_tables.refresh_external_table(source_node) %}
     {% endif %}
+
     {% do return(build_plan) %}
 {% endmacro %}
