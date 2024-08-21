@@ -1,8 +1,6 @@
 **PROOF OF CONCEPT - USE AT OWN RISK**
 
-Experimental decoupled `dbt-external-tables` for consideration by dbt-athena-community maintainers. See https://github.com/dbt-athena/dbt-athena/issues/633
-
-Can we implement dbt-external-tables without having to merge into dbt-external-tables?
+Experimental decoupled `dbt-external-tables`, now maintained by dbt-athena-community maintainers. See https://github.com/dbt-athena/dbt-athena/issues/633, update any existing references to new `dbt-athena` owner.
 
 # Usage
 
@@ -22,7 +20,7 @@ Package provides the target-independent implementation
 Package provides athena-specific implementation
 
 ```yaml
-  - git: https://github.com/brabster/dbt-athena-external-tables.git
+  - git: https://github.com/dbt-athena/dbt-athena-external-tables.git
     revision: main
 ```
 
