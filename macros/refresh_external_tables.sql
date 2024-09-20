@@ -40,12 +40,12 @@
                         {%- endfor -%}
 
                         {%- do partition_parts.append({'name': partition.name, 'value': val}) -%}
-                        {%- set path_parts = [dbt_external_tables.render_from_context(partition.path_macro, partition.name, val)] -%}
+                        {%- set path_parts = preexisting.path ~ dbt_external_tables.render_from_context(partition.path_macro, partition.name, val) -%}
                         {%- set construct = {
                             'partition_by': partition_parts,
-                            'path': path_parts | join('/')
+                            'path': path_parts
                         } -%}
-                        {% do finals.append(construct) %}
+                        {%- do parts_list.append(construct) -%}
                     {%- endfor -%}
 
                 {%- endfor -%}
@@ -56,7 +56,7 @@
                   {%- endfor -%}
                 {%- endif -%}
 
-              {%- endfor -%}
+            {%- endfor -%}
             {%- set ddl = dbt_external_tables.redshift_alter_table_add_partitions(source_node, finals) -%}
             {{ return(ddl) }}
 
