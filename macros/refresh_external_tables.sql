@@ -57,7 +57,7 @@
 
                         {%- set construct = {
                             'partition_by': partition_parts,
-                            'path': path_parts | join('/')
+                            'path': path_parts
                         } -%}
                         {%- do partition_specs.append(construct) -%}
                     {%- endfor -%}
