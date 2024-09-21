@@ -57,3 +57,74 @@ sources:
             data_type: 'STRING'
           - name: version
             data_type: 'BIGINT'
+
+      - name: aws_public_blockchain
+        database: awscatalog
+        quoting:
+          database: false
+          schema: false
+          identifier: false
+        describe: "https://github.com/aws-samples/digital-assets-examples/blob/main/analytics/"
+        external:
+          location: "s3://aws-public-blockchain/v1.0"
+          row_format: "serde 'org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe'"
+          partitions:
+            - name: coin
+              data_type: string
+              path_macro: value_only
+              vals: [
+                 'btc',
+                 'eth'
+              ]
+            - name: transactions
+              data_type: string
+              path_macro: value_only
+              vals: [
+                '/transactions/date=2024-09-19',
+                '/transactions/date=2024-09-20'
+              ]
+        columns:
+          - name: gas
+            data_type: bigint
+          - name: hash
+            data_type: string
+          - name: input
+            data_type: string
+          - name: nonce
+            data_type: bigint
+          - name: value
+            data_type: double
+          - name: block_number
+            data_type: bigint
+          - name: block_hash
+            data_type: string
+          - name: transaction_index
+            data_type: bigint
+          - name: from_address
+            data_type: string
+          - name: to_address
+            data_type: string
+          - name: gas_price
+            data_type: bigint
+          - name: receipt_cumulative_gas_used
+            data_type: bigint
+          - name: receipt_gas_used
+            data_type: bigint
+          - name: receipt_contract_address
+            data_type: string
+          - name: receipt_status
+            data_type: bigint
+          - name: receipt_effective_gas_price
+            data_type: bigint
+          - name: transaction_type
+            data_type: int
+          - name: max_fee_per_gas
+            data_type: bigint
+          - name: max_priority_fee_per_gas
+            data_type: bigint
+          - name: block_timestamp
+            data_type: timestamp
+          - name: date
+            data_type: string
+          - name: last_modified
+            data_type: timestamp

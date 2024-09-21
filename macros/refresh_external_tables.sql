@@ -1,14 +1,8 @@
 {% macro athena__refresh_external_table(source_node) %}
   {# https://docs.aws.amazon.com/athena/latest/ug/partitions.html #}
 
-  {%- set starting = [
-    {
-      'partition_by': [],
-      'path': ''
-    }
-  ] -%}
-
-  {%- set ending = [] -%}
+  {%- set athena_partitioning = [{'partition_by': [], 'path': ''}] -%}
+  {%- set list_partitions = [] -%}
   {%- set finals = [] -%}
 
   {%- set partitions = source_node.external.partitions -%}
@@ -25,12 +19,12 @@
         {%- set part_len = partitions|length -%}
         {%- for partition in partitions -%}
           {%- if not loop.first -%}
-            {%- set starting = ending -%}
-            {%- set ending = [] -%}
+            {%- set athena_partitioning = list_partitions -%}
+            {%- set list_partitions = [] -%}
           {%- endif -%}
-          {%- for preexisting in starting -%}
+          {%- for preexisting in athena_partitioning -%}
             {%- if partition.vals.macro -%}
-              {%- set vals = render_from_context(partition.vals.macro, **partition.vals.args) -%}
+              {%- set vals = dbt_external_tables.render_from_context(partition.vals.macro, **partition.vals.args) -%}
             {%- elif partition.vals is string -%}
               {%- set vals = [partition.vals] -%}
             {%- else -%}
@@ -48,19 +42,19 @@
 
             {%- for val in vals -%}
               {# For each preexisting item, add a new one #}
-              {%- set next_partition_by = [] -%}
+              {%- set partition_parts = [] -%}
               {%- for prexist_part in preexisting.partition_by -%}
-                {%- do next_partition_by.append(prexist_part) -%}
+                {%- do partition_parts.append(prexist_part) -%}
               {%- endfor -%}
-              {%- do next_partition_by.append({'name': partition.name, 'value': val}) -%}
+              {%- do partition_parts.append({'name': partition.name, 'value': val}) -%}
               {# Concatenate path #}
-              {%- set concat_path = preexisting.path ~ render_from_context(partition.path_macro, path_macro_key, val) -%}
-              {%- do ending.append({'partition_by': next_partition_by, 'path': concat_path}) -%}
+              {%- set path_parts = preexisting.path ~ render_from_context(partition.path_macro, path_macro_key, val) -%}
+              {%- do list_partitions.append({'partition_by': partition_parts, 'path': path_parts}) -%}
             {%- endfor -%}
           {%- endfor -%}
           {%- if loop.last -%}
-            {%- for end in ending -%}
-              {%- do finals.append(end) -%}
+            {%- for construct in list_partitions -%}
+              {%- do finals.append(construct) -%}
             {%- endfor -%}
           {%- endif -%}
         {%- endfor -%}
