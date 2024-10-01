@@ -8,10 +8,10 @@ example:
 
     athena:
       type: athena
-      database: "awsdatacatalog"
-      region_name: "eu-central-1"
-      s3_staging_dir: "s3://paidmedia-tmp-athena/dbt/dev/ahou"
-      work_group: "ahou"
+      database: "{{ env_var('ATHENA_TEST_DBNAME', 'AwsDataCatalog') }}"
+      region_name: "{{ env_var('ATHENA_TEST_REGION') }}"
+      s3_staging_dir: "s3://{{ env_var('ATHENA_TEST_BUCKET') }}"
+      work_group: "{{ env_var('ATHENA_TEST_WORKGROUP', 'primary') }}"
       schema:  dbt_athena_external_tables_example
       threads: 1
       retries: 1
