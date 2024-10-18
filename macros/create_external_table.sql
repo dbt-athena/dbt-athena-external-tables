@@ -29,6 +29,7 @@
     {% if external.row_format -%} row format {{external.row_format}} {%- endif %}
     {% if external.file_format -%} stored as {{external.file_format}} {%- endif %}
     {% if external.serde_properties -%} with serdeproperties {{external.serde_properties}} {%- endif %}
+    {% if external.output_format -%} outputformat {{external.output_format}} {%- endif %}
     {% if external.location -%} location '{{external.location}}' {%- endif %}
     {% if external.table_properties -%} tblproperties {{external.table_properties}} {%- endif %}
     ;
