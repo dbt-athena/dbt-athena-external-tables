@@ -57,3 +57,76 @@ sources:
             data_type: 'STRING'
           - name: version
             data_type: 'BIGINT'
+  - name: dbt_analytics_platform_metadata_insights
+    tables:
+      - name: raw_cloudtrail_event_logs
+        database: awscatalog
+        external:
+          location: 's3://cloudtrail-logs/AWSLogs/YOUR-ACCOUNT-ID/CloudTrail/YOUR-AWS-REGION-1/'
+          row_format: "SERDE 'org.apache.hive.hcatalog.data.JsonSerDe'"
+          file_format: "INPUTFORMAT 'com.amazon.emr.cloudtrail.CloudTrailInputFormat'"
+          output_format: "'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'"
+          hive_compatible_partitions: true
+          table_properties: ('projection.enabled'='true', 'projection.timestamp.format'='yyyy/MM/dd', 'projection.timestamp.interval'='1', 'projection.timestamp.interval.unit'='DAYS', 'projection.timestamp.range'='2020/01/01,NOW', 'projection.timestamp.type'='date', 'storage.location.template'='s3://cloudtrail-logs/AWSLogs/YOUR-ACCOUNT-ID/CloudTrail/YOUR-AWS-REGION-1//${timestamp}')
+          partitions:
+            - name: "`timestamp`"
+              data_type: STRING
+        columns:
+          - name: eventversion
+            data_type: STRING
+          - name: useridentity
+            data_type: STRUCT<type:STRING,principalid:STRING,arn:STRING,accountid:STRING,invokedby:STRING,accesskeyid:STRING,username:STRING,onbehalfof:STRUCT<userid:STRING,identitystorearn:STRING>,sessioncontext:STRUCT<attributes:STRUCT<mfaauthenticated:STRING,creationdate:STRING>,sessionissuer:STRUCT<type:STRING,principalid:STRING,arn:STRING,accountid:STRING,username:STRING>,ec2roledelivery:string,webidfederationdata:STRUCT<federatedprovider:STRING,attributes:map<string,string>>>>
+          - name: eventtime
+            data_type: STRING
+          - name: eventsource
+            data_type: STRING
+          - name: eventname
+            data_type: STRING
+          - name: awsregion
+            data_type: STRING
+          - name: sourceipaddress
+            data_type: STRING
+          - name: useragent
+            data_type: STRING
+          - name: errorcode
+            data_type: STRING
+          - name: errormessage
+            data_type: STRING
+          - name: requestparameters
+            data_type: STRING
+          - name: responseelements
+            data_type: STRING
+          - name: additionaleventdata
+            data_type: STRING
+          - name: requestid
+            data_type: STRING
+          - name: eventid
+            data_type: STRING
+          - name: readonly
+            data_type: STRING
+          - name: resources
+            data_type: ARRAY<STRUCT<arn:STRING, accountid:STRING, type:STRING>>
+          - name: eventtype
+            data_type: STRING
+          - name: apiversion
+            data_type: STRING
+          - name: recipientaccountid
+            data_type: STRING
+          - name: serviceeventdetails
+            data_type: STRING
+          - name: sharedeventid
+            data_type: STRING
+          - name: vpcendpointid
+            data_type: STRING
+          - name: vpcendpointaccountid
+            data_type: STRING
+          - name: eventcategory
+            data_type: STRING
+          - name: addendum
+            data_type: STRUCT<reason:STRING, updatedfields:STRING, originalrequestid:STRING, originaleventid:STRING>
+          - name: sessioncredentialfromconsole
+            data_type: STRING
+          - name: edgedevicedetails
+            data_type:  STRING
+          - name: tlsdetails
+            data_type:  STRUCT<tlsversion:STRING, ciphersuite:STRING, clientprovidedhostheader:STRING>
