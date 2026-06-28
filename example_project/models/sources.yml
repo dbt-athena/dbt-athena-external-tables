@@ -66,11 +66,17 @@ sources:
           row_format: "SERDE 'org.apache.hive.hcatalog.data.JsonSerDe'"
           file_format: "INPUTFORMAT 'com.amazon.emr.cloudtrail.CloudTrailInputFormat'"
           output_format: "'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'"
-          hive_compatible_partitions: true
-          table_properties: ('projection.enabled'='true', 'projection.timestamp.format'='yyyy/MM/dd', 'projection.timestamp.interval'='1', 'projection.timestamp.interval.unit'='DAYS', 'projection.timestamp.range'='2020/01/01,NOW', 'projection.timestamp.type'='date', 'storage.location.template'='s3://cloudtrail-logs/AWSLogs/YOUR-ACCOUNT-ID/CloudTrail/YOUR-AWS-REGION-1//${timestamp}')
+          partition_projection: true
+          storage_location_template: 's3://cloudtrail-logs/AWSLogs/YOUR-ACCOUNT-ID/CloudTrail/YOUR-AWS-REGION-1//${timestamp}'
           partitions:
             - name: "`timestamp`"
               data_type: STRING
+              projection:
+                type: date
+                format: "yyyy/MM/dd"
+                interval: 1
+                interval.unit: DAYS
+                range: "2020/01/01,NOW"
         columns:
           - name: eventversion
             data_type: STRING

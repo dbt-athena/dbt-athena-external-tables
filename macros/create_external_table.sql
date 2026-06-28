@@ -31,6 +31,18 @@
     {% if external.serde_properties -%} with serdeproperties {{external.serde_properties}} {%- endif %}
     {% if external.output_format -%} outputformat {{external.output_format}} {%- endif %}
     {% if external.location -%} location '{{external.location}}' {%- endif %}
-    {% if external.table_properties -%} tblproperties {{external.table_properties}} {%- endif %}
+    {%- if external.partition_projection -%}
+        {%- set projection_properties = dbt_athena_external_tables.partition_projection_properties(source_node) -%}
+        {%- if external.table_properties -%}
+            {%- set extra_properties = external.table_properties | trim -%}
+            {%- if extra_properties.startswith('(') and extra_properties.endswith(')') -%}
+                {%- set extra_properties = extra_properties[1:-1] -%}
+            {%- endif -%}
+            {%- do projection_properties.append(extra_properties) -%}
+        {%- endif -%}
+        tblproperties ({{ projection_properties | join(', ') }})
+    {%- elif external.table_properties -%}
+        tblproperties {{external.table_properties}}
+    {%- endif %}
     ;
 {% endmacro %}
