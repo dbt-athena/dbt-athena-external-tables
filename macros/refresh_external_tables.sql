@@ -1,4 +1,7 @@
 {% macro athena__refresh_external_table(source_node) %}
+    {%- if source_node.external.get('partition_projection', false) -%}
+        {{ return([]) }}
+    {%- endif -%}
     {# https://docs.aws.amazon.com/athena/latest/ug/partitions.html #}
     {%- set partitions = source_node.external.partitions -%}
     {%- set hive_compatible_partitions = source_node.external.get('hive_compatible_partitions', false) -%}
